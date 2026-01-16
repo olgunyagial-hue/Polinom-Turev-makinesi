@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gelişmiş Denklem Çözücü</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #1a365d; text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #718096; margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #4a5568; }
+        input { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-size: 16px; transition: border 0.3s; }
+        input:focus { border-color: #4299e1; outline: none; }
+        button { width: 100%; padding: 15px; background: #2b6cb0; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 10px; }
+        button:hover { background: #2c5282; }
+        #result { margin-top: 25px; padding: 20px; border-radius: 12px; display: none; text-align: center; border-left: 5px solid #2b6cb0; background: #f7fafc; }
+        .math { font-family: 'Courier New', Courier, monospace; font-size: 1.2em; color: #2d3748; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Otonom Cebir Motoru</h2>
+    <p class="subtitle">ax² + bx + c = 0</p>
+    
+    <div class="input-group">
+        <label>a Katsayısı:</label>
+        <input type="number" id="a" placeholder="Örn: 1">
+    </div>
+    <div class="input-group">
+        <label>b Katsayısı:</label>
+        <input type="number" id="b" placeholder="Örn: -5">
+    </div>
+    <div class="input-group">
+        <label>c Katsayısı:</label>
+        <input type="number" id="c" placeholder="Örn: 6">
+    </div>
+    
+    <button onclick="solve()">Kökleri Analiz Et 🎯</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function solve() {
+        const a = parseFloat(document.getElementById('a').value);
+        const b = parseFloat(document.getElementById('b').value);
+        const c = parseFloat(document.getElementById('c').value);
+        const resDiv = document.getElementById('result');
+
+        if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) {
+            alert("Dostum geçerli bir 2. derece denklem gir! (a sıfır olamaz) 😆");
+            return;
+        }
+
+        const delta = (b * b) - (4 * a * c);
+        let output = `<div style="color:#718096">Diskriminant (Δ) = ${delta}</div><br>`;
+
+        if (delta > 0) {
+            const sqrtDelta = Math.sqrt(delta);
+            if (Number.isInteger(sqrtDelta)) {
+                // Rasyonel/Tam sayı sonuç
+                const x1 = (-b + sqrtDelta) / (2 * a);
+                const x2 = (-b - sqrtDelta) / (2 * a);
+                output += `<b>Rasyonel Kökler Bulundu:</b><br><div class="math">x₁ = ${x1} <br> x₂ = ${x2}</div>`;
+            } else {
+                // Köklü/İrrasyonel sonuç (L kuralı devrede)
+                output += `<b>İrrasyonel (Köklü) Kökler:</b><br><div class="math">x = (${-b} ± √${delta}) / ${2 * a}</div>`;
+                output += `<br><small>Yaklaşık: x₁ ≈ ${((-b + sqrtDelta) / (2 * a)).toFixed(2)}</small>`;
+            }
+        } else if (delta === 0) {
+            const x = -b / (2 * a);
+            output += `<b>Çakışık Tek Kök:</b><br><div class="math">x = ${x}</div>`;
+        } else {
+            // Karmaşık kök (Dış açıortay gibi sanal) 😆
+            output += `<b>Reel Kök Yok Dostum!</b><br>Karmaşık Kökler:<br><div class="math">x = (${-b} ± i√${Math.abs(delta)}) / ${2 * a}</div>`;
+        }
+
+        resDiv.innerHTML = output;
+        resDiv.style.display = "block";
+    }
+</script>
+
+</body>
+</html>

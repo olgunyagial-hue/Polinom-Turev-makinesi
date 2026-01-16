@@ -1,0 +1,613 @@
+!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İç Açıortay Teoremi - Interaktif Öğrenme 📐</title>
+    <style>
+        /* ==================== STILLER ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .fun-fact {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .instruction {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3d6 100%);
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        
+        canvas:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .result-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .result-text {
+            font-size: 1.15em;
+            color: #333;
+            margin: 12px 0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+        
+        .calculated {
+            color: #27ae60;
+            font-weight: 700;
+            font-size: 1.4em;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d4f1e8 100%);
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            animation: popIn 0.5s ease;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.2);
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .emoji {
+            font-size: 1.4em;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.05em;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d4f1e8 100%);
+            color: #27ae60;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            text-align: center;
+            max-width: 450px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.3em;
+            margin: 15px 0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .modal-content input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .modal-buttons {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== HTML YAPISI ==================== -->
+    <div class="container">
+        <h1>📐 İç Açıortay Teoremi</h1>
+        <p class="subtitle">"Tıkla, Gir, Öğren!" 🎯</p>
+        
+        <div class="fun-fact">
+            <strong>🤓 Teorem:</strong> Bir üçgenin iç açıortayı, karşı kenarı komşu kenarlar oranında böler!<br>
+            <strong>✨ Formül: BN/NC = AB/AC</strong>
+        </div>
+        
+        <div class="instruction">
+            <span class="emoji">👆</span> Uzunluk etiketlerine tıkla ve değer gir!<br>
+            <small>(AB=?, AC=?, BN=?, NC=? yazan yerlere tıkla)</small>
+        </div>
+        
+        <div class="status" id="status">
+            🎨 Üçgen üzerindeki etikete tıkla ve değer gir!
+        </div>
+        
+        <canvas id="canvas" width="700" height="600"></canvas>
+        
+        <div class="controls">
+            <button onclick="calculate()">🎯 4. Uzunluğu Hesapla!</button>
+            <button class="reset-btn" onclick="reset()">🔄 Temizle</button>
+        </div>
+        
+        <div class="result-section">
+            <p class="result-text">
+                <span class="emoji">📏</span> AB = <span class="highlight" id="abValue">?</span>
+            </p>
+            <p class="result-text">
+                <span class="emoji">📏</span> AC = <span class="highlight" id="acValue">?</span>
+            </p>
+            <p class="result-text">
+                <span class="emoji">📏</span> BN = <span class="highlight" id="bnValue">?</span>
+            </p>
+            <p class="result-text">
+                <span class="emoji">📏</span> NC = <span class="highlight" id="ncValue">?</span>
+            </p>
+            <hr style="margin: 20px 0; border: none; border-top: 3px dashed #ddd;">
+            <p class="result-text" style="font-size: 1.25em;">
+                <span class="emoji">✅</span> Oran Kontrolü:<br>
+                BN/NC = <span class="highlight" id="ratio1">?</span> &nbsp;|&nbsp; AB/AC = <span class="highlight" id="ratio2">?</span>
+            </p>
+        </div>
+    </div>
+    
+    <!-- MODAL PENCERE -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">📏 Uzunluk Gir</h2>
+            <p id="modalDesc">Bu uzunluğu girin:</p>
+            <input type="number" id="lengthInput" placeholder="Örn: 6" min="0.1" step="0.1">
+            <div class="modal-buttons">
+                <button onclick="saveLength()">✅ Kaydet</button>
+                <button class="reset-btn" onclick="closeModal()">❌ İptal</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        /* ==================== JAVASCRIPT KODLARI (HESAPLAMA MOTORİ) ==================== */
+        
+        // Canvas ve context
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Üçgen köşe noktaları
+        const A = {x: 350, y: 100};
+        const B = {x: 120, y: 500};
+        const C = {x: 580, y: 500};
+        
+        // Uzunluklar
+        let lengths = {
+            AB: null,
+            AC: null,
+            BN: null,
+            NC: null
+        };
+        
+        let N = null; // N noktası
+        let calculatedField = null; // Hesaplanan alan
+        let currentSegment = null; // Seçili segment
+        let clickableAreas = []; // Tıklanabilir alanlar
+        
+        // İki nokta arası mesafe hesaplama
+        function distance(p1, p2) {
+            return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+        }
+        
+        // N noktasını hesaplama
+        function calculateN() {
+            if (lengths.BN && lengths.NC) {
+                const bc = lengths.BN + lengths.NC;
+                const ratio = lengths.BN / bc;
+                N = {
+                    x: B.x + (C.x - B.x) * ratio,
+                    y: B.y + (C.y - B.y) * ratio
+                };
+                return true;
+            } else {
+                // Varsayılan olarak ortaya koy
+                N = {
+                    x: (B.x + C.x) / 2,
+                    y: (B.y + C.y) / 2
+                };
+                return false;
+            }
+        }
+        
+        // Üçgeni ve etiketleri çizme
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            clickableAreas = [];
+            
+            calculateN();
+            
+            // Üçgeni çiz
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(A.x, A.y);
+            ctx.lineTo(B.x, B.y);
+            ctx.lineTo(C.x, C.y);
+            ctx.closePath();
+            ctx.stroke();
+            
+            // AN açıortayını çiz (yeşil çizgi)
+            ctx.strokeStyle = '#27ae60';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(A.x, A.y);
+            ctx.lineTo(N.x, N.y);
+            ctx.stroke();
+            
+            // N noktasını çiz (turuncu)
+            ctx.fillStyle = '#f39c12';
+            ctx.beginPath();
+            ctx.arc(N.x, N.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#d68910';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Köşe noktalarını çiz (kırmızı)
+            ctx.fillStyle = '#e74c3c';
+            [A, B, C].forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Harf etiketlerini çiz
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 3;
+            
+            ctx.strokeText('A', A.x, A.y - 30);
+            ctx.fillText('A', A.x, A.y - 30);
+            
+            ctx.strokeText('B', B.x - 35, B.y + 12);
+            ctx.fillText('B', B.x - 35, B.y + 12);
+            
+            ctx.strokeText('C', C.x + 35, C.y + 12);
+            ctx.fillText('C', C.x + 35, C.y + 12);
+            
+            ctx.strokeText('N', N.x, N.y + 45);
+            ctx.fillText('N', N.x, N.y + 45);
+            
+            // Uzunluk etiketlerini çiz (TIKLANAB İLİR KUTUCUKLAR)
+            ctx.font = 'bold 22px Arial';
+            
+            const labels = [
+                {pos: {x: (A.x + B.x) / 2 - 50, y: (A.y + B.y) / 2}, text: lengths.AB ? `AB=${lengths.AB}` : 'AB=?', field: 'AB'},
+                {pos: {x: (A.x + C.x) / 2 + 50, y: (A.y + C.y) / 2}, text: lengths.AC ? `AC=${lengths.AC}` : 'AC=?', field: 'AC'},
+                {pos: {x: (B.x + N.x) / 2, y: B.y + 45}, text: lengths.BN ? `BN=${lengths.BN}` : 'BN=?', field: 'BN'},
+                {pos: {x: (N.x + C.x) / 2, y: C.y + 45}, text: lengths.NC ? `NC=${lengths.NC}` : 'NC=?', field: 'NC'}
+            ];
+            
+            labels.forEach(label => {
+                const metrics = ctx.measureText(label.text);
+                const padding = 12;
+                const boxWidth = metrics.width + padding * 2;
+                const boxHeight = 35;
+                
+                // Kutucuk rengi (dolu ise mavi, boş ise gri)
+                ctx.fillStyle = lengths[label.field] ? '#667eea' : '#95a5a6';
+                ctx.beginPath();
+                ctx.roundRect(label.pos.x - boxWidth/2, label.pos.y - boxHeight/2, boxWidth, boxHeight, 8);
+                ctx.fill();
+                
+                // Tıklanabilir alan kaydet
+                clickableAreas.push({
+                    x: label.pos.x - boxWidth/2,
+                    y: label.pos.y - boxHeight/2,
+                    width: boxWidth,
+                    height: boxHeight,
+                    field: label.field
+                });
+                
+                // Metin
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.fillText(label.text, label.pos.x, label.pos.y + 8);
+            });
+            
+            updateResults();
+        }
+        
+        // Canvas'a tıklama olayı
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Hangi alana tıklandığını bul
+            for (let area of clickableAreas) {
+                if (x >= area.x && x <= area.x + area.width &&
+                    y >= area.y && y <= area.y + area.height) {
+                    openModal(area.field);
+                    return;
+                }
+            }
+        });
+        
+        // Mouse hareket olayı (cursor değiştirme)
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            let isOverClickable = false;
+            for (let area of clickableAreas) {
+                if (x >= area.x && x <= area.x + area.width &&
+                    y >= area.y && y <= area.y + area.height) {
+                    isOverClickable = true;
+                    break;
+                }
+            }
+            
+            canvas.style.cursor = isOverClickable ? 'pointer' : 'default';
+        });
+        
+        // Modal pencereyi açma
+        function openModal(field) {
+            currentSegment = field;
+            document.getElementById('modalTitle').textContent = `📏 ${field} Uzunluğu`;
+            document.getElementById('modalDesc').textContent = `${field} uzunluğunu girin:`;
+            document.getElementById('lengthInput').value = lengths[field] || '';
+            document.getElementById('modal').classList.add('show');
+            setTimeout(() => document.getElementById('lengthInput').focus(), 100);
+        }
+        
+        // Modal pencereyi kapatma
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+            currentSegment = null;
+        }
+        
+        // Uzunluğu kaydetme
+        function saveLength() {
+            const value = parseFloat(document.getElementById('lengthInput').value);
+            if (value && value > 0) {
+                lengths[currentSegment] = value;
+                calculatedField = null;
+                closeModal();
+                draw();
+                
+                const count = Object.values(lengths).filter(v => v !== null).length;
+                document.getElementById('status').innerHTML = `📝 ${count}/4 uzunluk girildi${count === 3 ? ' - Hesapla butonuna bas!' : '!'}`;
+            } else {
+                alert('⚠️ Lütfen geçerli bir pozitif sayı girin!');
+            }
+        }
+        
+        // 4. UZUNLUĞU HESAPLAMA (ANA FONKSİYON!)
+        function calculate() {
+            const count = Object.values(lengths).filter(v => v !== null).length;
+            
+            if (count < 3) {
+                alert('⚠️ En az 3 uzunluk girmelisin! Şu an ' + count + ' tane var.');
+                return;
+            }
+            
+            if (count === 4) {
+                alert('✅ Zaten tüm uzunluklar girilmiş!');
+                return;
+            }
+            
+            // İÇ AÇIORTAY TEOREMİ: BN/NC = AB/AC
+            // Bu formülü kullanarak eksik değeri hesapla
+            
+            if (lengths.AB && lengths.AC && lengths.BN && !lengths.NC) {
+                // NC = (BN * AC) / AB
+                lengths.NC = (lengths.BN * lengths.AC) / lengths.AB;
+                calculatedField = 'NC';
+            }
+            else if (lengths.AB && lengths.AC && lengths.NC && !lengths.BN) {
+                // BN = (NC * AB) / AC
+                lengths.BN = (lengths.NC * lengths.AB) / lengths.AC;
+                calculatedField = 'BN';
+            }
+            else if (lengths.AB && lengths.BN && lengths.NC && !lengths.AC) {
+                // AC = (NC * AB) / BN
+                lengths.AC = (lengths.NC * lengths.AB) / lengths.BN;
+                calculatedField = 'AC';
+            }
+            else if (lengths.AC && lengths.BN && lengths.NC && !lengths.AB) {
+                // AB = (BN * AC) / NC
+                lengths.AB = (lengths.BN * lengths.AC) / lengths.NC;
+                calculatedField = 'AB';
+            }
+            
+            if (calculatedField) {
+                document.getElementById('status').innerHTML = `🎉 Harika! <strong>${calculatedField} = ${lengths[calculatedField].toFixed(2)}</strong> hesaplandı!`;
+                draw();
+            }
+        }
+        
+        // Sonuçları güncelleme
+        function updateResults() {
+            document.getElementById('abValue').innerHTML = lengths.AB ? 
+                (calculatedField === 'AB' ? `<span class="calculated">${lengths.AB.toFixed(2)} ✨</span>` : lengths.AB.toFixed(2)) : '?';
+            document.getElementById('acValue').innerHTML = lengths.AC ? 
+                (calculatedField === 'AC' ? `<span class="calculated">${lengths.AC.toFixed(2)} ✨</span>` : lengths.AC.toFixed(2)) : '?';
+            document.getElementById('bnValue').innerHTML = lengths.BN ? 
+                (calculatedField === 'BN' ? `<span class="calculated">${lengths.BN.toFixed(2)} ✨</span>` : lengths.BN.toFixed(2)) : '?';
+            document.getElementById('ncValue').innerHTML = lengths.NC ? 
+                (calculatedField === 'NC' ? `<span class="calculated">${lengths.NC.toFixed(2)} ✨</span>` : lengths.NC.toFixed(2)) : '?';
+            
+            // Oranları hesapla
+            if (lengths.AB && lengths.AC && lengths.BN && lengths.NC) {
+                const ratio1 = (lengths.BN / lengths.NC).toFixed(3);
+                const ratio2 = (lengths.AB / lengths.AC).toFixed(3);
+                
+                document.getElementById('ratio1').textContent = ratio1;
+                document.getElementById('ratio2').textContent = ratio2;
+            } else {
+                document.getElementById('ratio1').textContent = '?';
+                document.getElementById('ratio2').textContent = '?';
+            }
+        }
+        
+        // Temizleme fonksiyonu
+        function reset() {
+            lengths = {AB: null, AC: null, BN: null, NC: null};
+            calculatedField = null;
+            document.getElementById('status').innerHTML = '🎨 Üçgen üzerindeki etikete tıkla ve değer gir!';
+            draw();
+        }
+        
+        // Enter tuşu ile kaydetme
+        document.getElementById('lengthInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') saveLength();
+        });
+        
+        // İlk çizim
+        draw();
+    </script>
+</body>
+</html>

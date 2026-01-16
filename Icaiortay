@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Olgun - Otonom Açıortay</title>
+    <style>
+        body { background: #1a1a1a; color: #00ffcc; font-family: sans-serif; text-align: center; }
+        canvas { border: 2px solid #00ffcc; background: #000; margin-top: 20px; max-width: 90%; cursor: pointer; }
+        h1 { color: #ff00ff; text-shadow: 2px 2px #000; }
+        .link-box { margin: 20px; padding: 15px; }
+        #aciortay-linki { 
+            color: #00ffcc; 
+            text-decoration: none; 
+            border: 2px dashed #ff00ff; 
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        #aciortay-linki:hover { background: #ff00ff; color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>Otonom Açıortay Makinesi 📐</h1>
+    <p>Dostum, ekrana tıkla veya aşağıdaki linki kullan!</p>
+
+    <div class="link-box">
+        <a href="#" id="aciortay-linki">🔗 aciortay.linki (L Kuralı Bağlantısı)</a>
+    </div>
+
+    <canvas id="canvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const linkElement = document.getElementById('aciortay-linki');
+
+        // GitHub linkini buraya yaz dostum
+        const gercekLink = "https://github.com/olgun/aciortay-projesi"; 
+        linkElement.href = gercekLink;
+
+        // Çizim Fonksiyonu
+        ctx.strokeStyle = '#00ffcc';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(100, 300); ctx.lineTo(300, 100); ctx.lineTo(500, 300);
+        ctx.stroke();
+
+        // Kesikli Açıortay Çizgisi (Dış Açıortay Metaforu)
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(300, 100); ctx.lineTo(300, 350);
+        ctx.strokeStyle = '#ff00ff';
+        ctx.stroke();
+
+        // Canvas'a tıklayınca da linke gitsin (Otonom özellik)
+        canvas.addEventListener('click', () => {
+            window.location.href = gercekLink;
+        });
+    </script>
+</body>
+</html>

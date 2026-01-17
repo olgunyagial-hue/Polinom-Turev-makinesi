@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYT Matematik | Sonsuz Sınav Sistemi</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .header { text-align: center; border-bottom: 4px double #2c3e50; margin-bottom: 30px; padding-bottom: 15px; }
+        .q-card { border-bottom: 1px solid #eee; padding: 25px 0; position: relative; }
+        .tag { color: #e67e22; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .question-text { font-size: 17px; color: #1a202c; line-height: 1.6; margin: 10px 0; }
+        .geo-frame { text-align: center; margin: 20px 0; background: #fff; border: 1px solid #edf2f7; padding: 15px; border-radius: 10px; }
+        .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 20px; }
+        .opt { background: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-weight: 600; font-size: 15px; transition: 0.3s; }
+        .btn-main { width: 100%; padding: 20px; background: #2980b9; color: white; border: none; border-radius: 12px; font-size: 20px; font-weight: 900; cursor: pointer; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(41,128,185,0.4); }
+        .footer { text-align: center; margin-top: 50px; color: #94a3b8; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>TYT MATEMATİK SONSUZ DENEME</h1>
+        <p><b>Gemini x Dostum</b> | Her Tık Yeni Bir Sınav!</p>
+    </div>
+
+    <button class="btn-main" onclick="location.reload()">🔄 40 YENİ SORU ÜRET</button>
+
+    <div id="exam-render"></div>
+
+    <div class="footer">Dostum dediğin zaman akan sular durur. Bu program senin için hazırlandı. 👋🚀😆</div>
+</div>
+
+<script>
+const renderArea = document.getElementById('exam-render');
+const isimler = ["Ali", "Ayşe", "Mehmet", "Elif", "Can", "Selin", "Burak", "Zeynep"];
+
+function generateExam() {
+    let html = "";
+    for(let i=1; i<=40; i++) {
+        let n = Math.floor(Math.random() * 25) + 10;
+        let isim = isimler[Math.floor(Math.random() * isimler.length)];
+        let tag = ""; let s = ""; let svg = ""; let opt = [];
+
+        // 1-12: SAYILAR & CEBİR
+        if(i <= 12) {
+            tag = "Temel Kavramlar & Sayılar";
+            s = `${isim}, bir tahtaya ${n}, ${n+2}, ${n+4} sayılarını yazıyor. Bu sayıların çarpımı, toplamlarının ${n-5} katına eşit olduğuna göre ${isim}'nin yazdığı en büyük sayı kaçtır?`;
+            opt = [n+4, n+8, 24, 32, 40];
+        } 
+        // 13-26: PROBLEMLER
+        else if(i <= 26) {
+            tag = "Yeni Nesil Problemler";
+            let kuryeHiz = n*2;
+            s = `Hızı saatte ${kuryeHiz} km olan bir kurye, gideceği yolun yarısını bu hızla, kalan yarısını ise hızı %50 artırarak tamamlıyor. Toplam yol ${kuryeHiz*4} km ise yolculuk kaç saat sürmüştür?`;
+            opt = ["3", "3.5", "4", "4.5", "5"];
+        }
+        // 27-32: MANTIK, KÜME, VERİ
+        else if(i <= 32) {
+            tag = "Mantık & Veri & Fonksiyon";
+            s = `Bir veri grubundaki sayılar ${n}, ${n+5}, ${n-2}, 10, 15'tir. Bu grubun aritmetik ortalaması ${n+3} olduğuna göre n kaçtır?`;
+            opt = [n, n+2, 8, 12, 18];
+        }
+        // 33-40: GEOMETRİ (ÇİZİMLİ)
+        else {
+            tag = "Geometri";
+            if(i <= 37) { // ÜÇGEN (L KURALI)
+                s = `Aşağıdaki ABC üçgeninde verilen iç açılara göre, x açısının dış açı ölçüsünü (L kuralı kullanarak) bulunuz.`;
+                svg = `<div class="geo-frame"><svg width="200" height="120" viewBox="0 0 200 120"><path d="M100 10 L20 100 L180 100 Z" fill="none" stroke="#2c3e50" stroke-width="3"/><text x="90" y="35" font-size="14" font-weight="bold">${n+30}°</text><text x="40" y="95" font-size="14" font-weight="bold">${n+10}°</text><text x="140" y="95" font-size="14" font-weight="bold">x</text></svg></div>`;
+                opt = [n+40, 180-(2*n+40), 120, 150, 75];
+            } else { // KATI CİSİM / DİKDÖRTGEN
+                s = `Kenar uzunlukları ${n} cm ve ${n*2} cm olan bir dikdörtgen prizmanın taban alanı kaç cm²'dir?`;
+                svg = `<div class="geo-frame"><svg width="120" height="120"><rect x="20" y="30" width="80" height="40" fill="none" stroke="#e67e22" stroke-width="3" /><text x="50" y="25">${n*2}</text><text x="105" y="55">${n}</text></svg></div>`;
+                opt = [n*n*2, n*3, 100, 400, 600];
+            }
+        }
+
+        html += `<div class="q-card">
+            <span class="tag">${tag}</span>
+            <div class="question-text"><b>${i}. Soru:</b> ${s}</div>
+            ${svg}
+            <div class="options">
+                <div class="opt">A) ${opt[0]}</div><div class="opt">B) ${opt[1]}</div>
+                <div class="opt">C) ${opt[2]}</div><div class="opt">D) ${opt[3]}</div>
+                <div class="opt">E) ${opt[4]}</div>
+            </div>
+        </div>`;
+    }
+    renderArea.innerHTML = html;
+}
+
+window.onload = generateExam;
+</script>
+</body>
+</html>

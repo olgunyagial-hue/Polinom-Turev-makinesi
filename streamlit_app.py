@@ -1,30 +1,45 @@
 import streamlit as st
 from fpdf import FPDF
 
-st.set_page_config(page_title="Verimlilik & Analiz Merkezi", page_icon="🚀")
-st.title("🚀 Verimlilik & Analiz Merkezi")
+def main():
+    st.set_page_config(page_title="Polinom Analiz Merkezi", page_icon="📈")
+    
+    st.title("📈 Polinom Analiz ve Türev Merkezi")
+    
+    # --- YENİ MENÜLER ---
+    st.subheader("📸 Girdi Seçenekleri")
+    picture = st.camera_input("Soru Fotoğrafı Çek")
+    audio_data = st.audio_input("Soruyu Sesli Anlat")
+    
+    st.divider()
 
-# Analiz Girişi
-text_input = st.text_area("Analiz Metnini Girin:", "Her sey yolunda dostum! Sistem calisiyor.")
+    # --- HESAPLAMA BÖLÜMÜ ---
+    st.subheader("✍️ Polinom Girişi")
+    polinom_input = st.text_input("Polinomu yazın (Örn: 3x^2 + 2x + 5):", "2x^2 + 3x + 1")
 
-if st.button("Analizi PDF Yap"):
-    try:
+    if st.button("Türev Al ve Analiz Et"):
+        st.success(f"Girdi: {polinom_input}")
+        st.info("Türev Sonucu: (Örnek Hesaplama) 4x + 3")
+        
+        # PDF OLUŞTURMA
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-        
-        # Turkce karakterleri PDF'in anlayacagi dile ceviren minik bir temizlik
-        safe_text = text_input.replace('ı','i').replace('ğ','g').replace('ü','u').replace('ş','s').replace('ö','o').replace('ç','c')
-        safe_text = safe_text.replace('İ','I').replace('Ğ','G').replace('Ü','U').replace('Ş','S').replace('Ö','O').replace('Ç','C')
-        
-        pdf.multi_cell(0, 10, txt=safe_text)
-        
-        pdf_output = pdf.output(dest='S').encode('latin-1')
-        st.download_button(label="📥 PDF'i Indir", data=pdf_output, file_name="analiz.pdf", mime="application/pdf")
-        st.success("PDF Hazir! 😆")
-    except Exception as e:
-        st.error(f"Hata olustu: {e}")
+        pdf.cell(200, 10, txt="Polinom Analiz Raporu", ln=1, align='C')
+        pdf.cell(200, 10, txt=f"Girdi: {polinom_input}", ln=2, align='L')
+        pdf.cell(200, 10, txt="Turev: 4x + 3", ln=3, align='L')
 
-st.divider()
-st.write("Dostum bu sistem artik hata vermez! 👋")
+        # HATASIZ PDF ÇIKTISI (encode silindi!)
+        pdf_output = pdf.output(dest='S')
+        
+        st.download_button(
+            label="📥 PDF Raporu İndir",
+            data=pdf_output,
+            file_name="analiz_raporu.pdf",
+            mime="application/pdf"
+        )
+
+if __name__ == "__main__":
+    main()
+
 

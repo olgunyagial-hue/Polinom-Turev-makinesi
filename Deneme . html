@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonsuz TYT</title>
+    <style>
+        body { font-size: 14px; font-family: sans-serif; padding: 10px; background: #fafafa; }
+        .q { background: #fff; padding: 15px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: #fff; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <button onclick="location.reload()">🔄 YENİ SINAV ÜRET</button>
+    <div id="box"></div>
+    <script>
+        const b = document.getElementById('box');
+        let c = "";
+        for(let i=1; i<=40; i++) {
+            let n = Math.floor(Math.random() * 40) + 10;
+            let s = i <= 15 ? `Sayılar: ${n} sayısının 3 katının 5 eksiği kaçtır?` : 
+                    i <= 30 ? `Problem: Saatte ${n} km giden araç 3 saatte kaç km gider?` : 
+                    `Geometri: Kenarı ${n} olan karenin çevresi kaçtır?`;
+            c += `<div class="q"><b>${i}.</b> ${s}<br><br><b>A)</b> ${n+3} <b>B)</b> ${n*3} <b>C)</b> ${n-5}</div>`;
+        }
+        b.innerHTML = c;
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L-Çeviri | Podcast Çevirici</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #1a73e8; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #1557b0; }
+        #output { margin-top: 20px; padding: 15px; background: #e8f0fe; border-left: 5px solid #1a73e8; min-height: 50px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>L-Çeviri 😆</h2>
+        <p>X veya YouTube linkini yapıştır, Türkçe metni al!</p>
+        <input type="text" id="videoLink" placeholder="https://youtube.com/...">
+        <button onclick="ceviriyiBaslat()">L Kuralı ile Çevir!</button>
+        <div id="output">Metin hazırlanıyor dostum, beklemede kal...</div>
+    </div>
+
+    <script>
+        function ceviriyiBaslat() {
+            const link = document.getElementById('videoLink').value;
+            const output = document.getElementById('output');
+            if(!link) { alert("Linki unuttun dostum! 😆"); return; }
+            output.style.display = "block";
+            // Burada arka plandaki Python API'mıza istek göndereceğiz.
+        }
+    </script>
+</body>
+</html>
